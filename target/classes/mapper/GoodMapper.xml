@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.neusoft.mapper.ProductMapper">
+    <insert id="insertGood" useGeneratedKeys="true" keyProperty="id">
+        insert into product(name, description, discount, category_id, imgs, create_time) value (#{product.name},#{product.description},#{product.discount},#{product.categoryId},#{product.imgs},#{product.createTime})
+    </insert>
+    <update id="saleGood">
+        update `product` set sales = sales + #{count} ,sale_money = sale_money + #{money} where product.id = #{id}
+    </update>
+
+
+    <select id="findFrontGoods" resultType="cn.neusoft.entity.dto.GoodDTO">
+        SELECT product.*,MIN(good_standard.price)*discount as price FROM `product` LEFT JOIN good_standard on product.id = good_standard.good_id  WHERE is_delete = 0 AND recommend = 1 GROUP BY id  ORDER BY price ASC
+    </select>
+</mapper>
